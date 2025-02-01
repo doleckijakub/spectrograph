@@ -42,11 +42,16 @@ void drawPixel(int x, int y, bool on) {
 }
 
 void drawGraph(float values[]) {
+  for (int x = 1; x < BOARD_W - 1; x++)
+    for (int y = 1; y < BOARD_H - 1; y++)
+      drawPixel(x, y, false);
+  
   for (int x = 0; x < BOARD_W; x++) {
     drawPixel(x, 0, true);
     drawPixel(x, BOARD_H - 1, true);
     
-    drawPixel(x, 1 + int(values[x] * (BOARD_H - 2)), true);
+    if (1 <= x && x <= 19 && 0.f <= values[x - 1] && values[x - 1] <= 1.f)
+      drawPixel(x, 1 + int((1.f - values[x - 1]) * (BOARD_H - 2)), true);
   }
 
   for (int y = 0; y < BOARD_H; y++) {
@@ -65,11 +70,16 @@ void setup() {
 }
 
 void loop() {
-  float values[BOARD_W] = {0};
+  float values[BOARD_W - 2] = {0};
 
-  for (int i = 0; Serial.available() && i < BOARD_W; i++) {
+  for (int i = 0; Serial.available() && i < BOARD_W - 2; i++) {
     values[i] = Serial.parseFloat();
   }
   
   drawGraph(values);
+
+  lcd.setCursor(5, 0);
+  lcd.print(values[0]);
+
+  delay(200);
 }
