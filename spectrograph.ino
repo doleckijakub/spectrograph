@@ -85,7 +85,7 @@ void loop() {
   drawGraph(values);
 
   lcd.setCursor(5, 0);
-  lcd.print(values[0]);
+  lcd.print(":)");
 
   delay(50);
 }
